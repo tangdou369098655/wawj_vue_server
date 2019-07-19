@@ -1,26 +1,27 @@
-//引入路由模块
-const express=require('express');
-//创建路由器对象
-var router=express.Router();
-//引入连接池模块
-const pool=require('../pool.js');
-const querystring=require('querystring');
-// const bodyParser=require('body-parser');
-//商品查询
-router.get('/',(req,res)=>{
-	var search1=decodeURI(req.query.pid);
-	if(!search1){
-		res.send('请至少输入一个商品关键字');
-		return;
-	}else{
-	pool.query(`select * from product_details where product_id=? `,[search1],(err, result) =>{
-		if (err) console.log(err);
-		var search = result[0];
-		console.log(search);
-		res.send(search);
-	});}
+const express = require("express");
+const router = express.Router();
+const pool = require("../pool");
 
-});
-//导出路由器对象
-module.exports=router;
+//需要查询多个数据表格
+router.get("/", (req, res) => {
+  var pid = req.query.pid;
+  var output = {
+    product: {}
+  }
+  if (pid !== undefined) {
+    var sql1 = `select * from index_product where pid=?`;
+    pool.query(sql1, [pid], (err, result) => {
+      if (err) console.log(err);
+      output.product = result;
+      console.log(output);
+      console.log("haha1");
+          res.send(output);
+      })
+    
+  }else{
+    res.send(output);
+    console.log(444)
+  }
+})
 
+module.exports = router;

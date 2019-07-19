@@ -13,6 +13,7 @@ server.listen(3000);
 //跨域请求cors
 server.use(cors({
   origin:"http://localhost:8080" ,
+  // origin:"*" ,
   // origin:"http://127.0.0.1:5501" ,
   credentials: true
 }));
